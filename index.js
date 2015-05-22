@@ -30,8 +30,9 @@ app.get('/', function(req, res) {
 
 // when we get a comment request
 app.post('/slack/issue_comment', function(req, res) {
-	console.log(req.body);
-	var data = req.body.payload;
+	var data = req.body;
+	
+	console.log(data);
 
 	if (data.action == 'created' && data.issue && data.comment) {
 		addToQueue({
@@ -43,9 +44,9 @@ app.post('/slack/issue_comment', function(req, res) {
 
 // when we get an issue request
 app.post('/slack/issues', function(req, res) {
-	var data = req.body.payload;
+	var data = req.body;
 	
-	console.log(req.body);
+	console.log(data);
 
 	if (data.action == 'closed' && data.issue) {
 		addToQueue({
