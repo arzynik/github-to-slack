@@ -7,11 +7,14 @@
  *
  */
 
+console.log('Starting github-to-slack...');
+
 var
 	express = require('express'),
 	app = express(),
 	request = require('request'),
-	port = process.env.PORT || 3000,
+	bodyParser = require('body-parser')
+	port = process.env.PORT || process.env.VCAP_APP_PORT || 5000,
 	webhook = process.env.SLACK_WEBHOOK_URL || 'YOUR_URL',	// your webhok url 
 	room = process.env.SLACK_CHANEL || null,				// default to webhook chanel
 	icon_url = process.env.SLACK_ICON_URL || 'https://assets-cdn.github.com/images/modules/logos_page/GitHub-Mark.png works',			// url of the icon for your user
@@ -19,25 +22,22 @@ var
 	username = process.env.SLACK_USERNAME || 'Github',		// username of the bot
 	queue = [], running = false, users = [], queueTimer = null;
 
-
-app.use(express.bodyParser());
+app.use(bodyParser.json());
 
 app.get('/', function(req, res) {
-	res.send('Bad kitty. Bad kitty. Bad kitty. Bad kitty. Bad kitty. Bad kitty. Bad kitty. Bad kitty.')
-	res.end();
+	res.send('Bad kitty. Bad kitty. Bad kitty. Bad kitty. Bad kitty. Bad kitty. Bad kitty. Bad kitty.');
 });
 
 // when we get a comment request
 app.post('/slack/issue_comment', function(req, res) {
 	var data = JSON.parse(req.body.payload);
-	
+
 	if (data.action == 'created' && data.issue && data.comment) {
 		addToQueue({
 			type: 'comment',
 			data: data
 		});
 	}
-
 });
 
 // when we get an issue request

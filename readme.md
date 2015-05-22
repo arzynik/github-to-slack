@@ -7,7 +7,7 @@ The purpose of this script is to group up issue closing, their comments, and for
 1. Add a custom webhook integration at https://**TEAMDOMAIN**.slack.com/services/new/incoming-webhook replacing **TEAMDOMAIN** with your url.
 2. Edit the **install.sh** with your **SERVER** path.
 3. Run **install.sh** to add the event service hooks to github.
-4. If you are on [Heroku](heroku.com), [AppFog](appfog.com) or some other host where you can define your server variables, define them as described below. Otherwise you can edit your **app.js** file.
+4. If you are on [Heroku](http://heroku.com), [AppFog](http://appfog.com) or some other host where you can define your environment variables, define them as described below. Otherwise you can edit your **app.js** file.
 
 ### Configuration
 - **SLACK_WEBHOOK_URL** - Webhook url generated in Installation step 1.
