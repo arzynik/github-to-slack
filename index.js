@@ -10,7 +10,7 @@
 console.log('Starting github-to-slack...');
 
 var
-	express = require('express'),
+express = require('express'),
 	app = express(),
 	request = require('request'),
 	bodyParser = require('body-parser')
@@ -50,7 +50,7 @@ app.post('/slack/issues', function(req, res) {
 			data: data
 		});
 	}
-	
+
 	res.end();
 });
 
@@ -104,12 +104,12 @@ var processQueue = function() {
 	}
 
 	running = true;
-	
+
 	// only has 15 seconds to finish. otherwise it will try again
 	setTimeout(function() {
 		running = false;
 	}, 15000);
-	
+
 	// each user
 	for (var u in queue) {
 		// each issue
@@ -126,7 +126,7 @@ var processQueue = function() {
 					closeAction = queue[u][i][x];
 				}
 			}
-			
+
 			if (closeAction) {
 				var message = ' closed issue <a href="' + closeAction.data.issue.html_url + '">#' + closeAction.data.issue.number + '</a>: <a href="' + closeAction.data.issue.html_url + '">' + closeAction.data.issue.title + '</a>';
 
@@ -136,7 +136,7 @@ var processQueue = function() {
 						message += '<br>' + queue[u][i][x].data.comment.body;
 					}
 				}
-				
+
 				var data = {
 					message_format: 'html',
 					format: 'json',
@@ -144,7 +144,7 @@ var processQueue = function() {
 					room_id: room,
 					text: getDisplayUser(queue[u][i][x].data.sender) + message
 				};
-				
+
 				if (room) {
 					data.channel = room;
 				}
@@ -154,7 +154,7 @@ var processQueue = function() {
 				} else if (icon_url) {
 					data.icon_url = icon_url;
 				}
-				
+
 				if (username) {
 					data.username = username;
 				}
@@ -164,7 +164,7 @@ var processQueue = function() {
 			queue[u][i] = null;	
 		}
 	}
-	
+
 	queue = [];
 	running = false;
 };
