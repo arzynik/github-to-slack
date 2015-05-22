@@ -164,6 +164,7 @@ var processQueue = function() {
 				request.post({
 					url: webhook,
 					form: data,
+					json: true
 				}, function(err,res,body) {
 					console.log(arguments);
 				});
