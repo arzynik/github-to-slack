@@ -20,6 +20,7 @@ var
 	icon_url = process.env.SLACK_ICON_URL || 'https://assets-cdn.github.com/images/modules/logos_page/GitHub-Mark.png',			// url of the icon for your user
 	icon_emoji = process.env.SLACK_ICON_EMOJI || null,		// url of the icon for your user
 	username = process.env.SLACK_USERNAME || 'GitHub',		// username of the bot
+	use_github_users = process.env.SLACK_USE_GITHUB_USERS || null, // use the username and image of the github user performing the action
 	queue = [], running = false, users = [], queueTimer = null;
 
 app.use(bodyParser.json());
@@ -132,7 +133,7 @@ var processQueue = function() {
 			}
 
 			if (closeAction) {
-				var message = ' closed issue <a href="' + closeAction.data.issue.html_url + '">#' + closeAction.data.issue.number + '</a>: <a href="' + closeAction.data.issue.html_url + '">' + closeAction.data.issue.title + '</a>';
+				var message = ' closed issue <' + closeAction.data.issue.html_url + '|#' + closeAction.data.issue.number + '>: <' + closeAction.data.issue.html_url + '|closeAction.data.issue.title>';
 
 				for (var x in queue[u][i]) {
 					// each comment
@@ -148,15 +149,22 @@ var processQueue = function() {
 				if (room) {
 					data.channel = room;
 				}
+				
+				if (use_github_users) {
+					data.icon_url = closeAction.data.sender.avatar_url;
+					data.username = closeAction.data.sender.login + ' via GitHub';
 
-				if (icon_emoji) {
-					data.icon_emoji = icon_emoji;
-				} else if (icon_url) {
-					data.icon_url = icon_url;
-				}
+				} else {
 
-				if (username) {
-					data.username = username;
+					if (icon_emoji) {
+						data.icon_emoji = icon_emoji;
+					} else if (icon_url) {
+						data.icon_url = icon_url;
+					}
+
+					if (username) {
+						data.username = username;
+					}
 				}
 				
 				console.log(data);
