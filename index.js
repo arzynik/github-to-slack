@@ -163,7 +163,7 @@ var processQueue = function() {
 
 				request.post({
 					url: webhook,
-					form: data,
+					body: data,
 					json: true
 				}, function(err,res,body) {
 					console.log(arguments);
