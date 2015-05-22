@@ -10,16 +10,16 @@
 console.log('Starting github-to-slack...');
 
 var
-express = require('express'),
+	express = require('express'),
 	app = express(),
 	request = require('request'),
 	bodyParser = require('body-parser')
 	port = process.env.PORT || process.env.VCAP_APP_PORT || 5000,
 	webhook = process.env.SLACK_WEBHOOK_URL || 'YOUR_URL',	// your webhok url 
 	room = process.env.SLACK_CHANEL || null,				// default to webhook chanel
-	icon_url = process.env.SLACK_ICON_URL || 'https://assets-cdn.github.com/images/modules/logos_page/GitHub-Mark.png works',			// url of the icon for your user
+	icon_url = process.env.SLACK_ICON_URL || 'https://assets-cdn.github.com/images/modules/logos_page/GitHub-Mark.png',			// url of the icon for your user
 	icon_emoji = process.env.SLACK_ICON_EMOJI || null,		// url of the icon for your user
-	username = process.env.SLACK_USERNAME || 'Github',		// username of the bot
+	username = process.env.SLACK_USERNAME || 'GitHub',		// username of the bot
 	queue = [], running = false, users = [], queueTimer = null;
 
 app.use(bodyParser.json());
@@ -142,7 +142,6 @@ var processQueue = function() {
 				}
 
 				var data = {
-					room_id: room,
 					text: getDisplayUser(queue[u][i][x].data.sender) + message
 				};
 
@@ -162,7 +161,12 @@ var processQueue = function() {
 				
 				console.log(data);
 
-				request.post(webhook).form(data);
+				request.post({
+					url: webhook,
+					form: data,
+				}, function(err,res,body) {
+					console.log(arguments);
+				});
 			}	
 			queue[u][i] = null;	
 		}
@@ -173,5 +177,5 @@ var processQueue = function() {
 };
 
 app.listen(port, function() {
-	console.log('Node app is running on port ' + port);
+	console.log('github-to-slack is running on port ' + port);
 });
