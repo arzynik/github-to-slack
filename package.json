@@ -1,0 +1,9 @@
+{
+ "name":"github-to-slack",
+  "version":"0.0.1",
+  "dependencies":{
+      "express":"",
+      "request":""
+  }
+}
+
