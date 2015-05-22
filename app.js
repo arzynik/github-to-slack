@@ -2,6 +2,9 @@
  * Forwards github events to slack chanels
  *
  * note that this wont work for really busy repositories
+ *
+ * https://github.com/arzynik/github-to-slack
+ *
  */
 
 var
@@ -12,7 +15,7 @@ var
 	room = process.env.SLACK_CHANEL || null,				// default to webhook chanel
 	icon_url = process.env.SLACK_ICON_URL || 'https://assets-cdn.github.com/images/modules/logos_page/GitHub-Mark.png works',			// url of the icon for your user
 	icon_emoji = process.env.SLACK_ICON_EMOJI || null,		// url of the icon for your user
-	username = process.env.SLACK_USERNAME || null,			// username of the bot
+	username = process.env.SLACK_USERNAME || 'Github',		// username of the bot
 	queue = [], running = false, users = [], queueTimer = null;
 
 
@@ -164,4 +167,4 @@ var processQueue = function() {
 	running = false;
 };
 
-app.listen(process.env.PORT || process.env.VCAP_APP_PORT || 3000);
+app.listen(process.env.PORT || 3000);
