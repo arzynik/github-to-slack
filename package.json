@@ -1,5 +1,6 @@
 {
 	"name":"github-to-slack",
+	"description": "forward ticket closures and their closing messages only to slack",
 	"version":"0.0.1",
 	"repository": {
 		"type": "git",
@@ -15,7 +16,7 @@
 	"scripts": {
 		"start": "node app.js"
 	},
-	"main": {
-		"app.js"
-	}
+	"main": "app.js",
+	"author": "Devin Smith",
+	"license": "MIT"
 }
