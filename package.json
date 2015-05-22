@@ -14,9 +14,9 @@
 		"node": "0.10.x"
 	},
 	"scripts": {
-		"start": "node app.js"
+		"start": "node index.js"
 	},
-	"main": "app.js",
+	"main": "index.js",
 	"author": "Devin Smith",
 	"license": "MIT"
 }

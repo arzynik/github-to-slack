@@ -11,6 +11,7 @@ var
 	express = require('express'),
 	app = express(),
 	request = require('request'),
+	port = process.env.PORT || 3000,
 	webhook = process.env.SLACK_WEBHOOK_URL || 'YOUR_URL',	// your webhok url 
 	room = process.env.SLACK_CHANEL || null,				// default to webhook chanel
 	icon_url = process.env.SLACK_ICON_URL || 'https://assets-cdn.github.com/images/modules/logos_page/GitHub-Mark.png works',			// url of the icon for your user
@@ -21,7 +22,8 @@ var
 
 app.use(express.bodyParser());
 
-app.all('/', function(req, res) {
+app.get('/', function(req, res) {
+	res.send('Bad kitty. Bad kitty. Bad kitty. Bad kitty. Bad kitty. Bad kitty. Bad kitty. Bad kitty.')
 	res.end();
 });
 
@@ -167,4 +169,6 @@ var processQueue = function() {
 	running = false;
 };
 
-app.listen(process.env.PORT || 3000);
+app.listen(port, function() {
+	console.log('Node app is running on port ' + port);
+});
