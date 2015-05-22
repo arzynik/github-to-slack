@@ -133,12 +133,12 @@ var processQueue = function() {
 			}
 
 			if (closeAction) {
-				var message = ' closed issue <' + closeAction.data.issue.html_url + '|#' + closeAction.data.issue.number + '>: <' + closeAction.data.issue.html_url + '|closeAction.data.issue.title>';
+				var message = ' closed issue <' + closeAction.data.issue.html_url + '|#' + closeAction.data.issue.number + '>: <' + closeAction.data.issue.html_url + '|' + closeAction.data.issue.title + '>';
 
 				for (var x in queue[u][i]) {
 					// each comment
 					if (queue[u][i][x].type == 'comment') {
-						message += '<br>' + queue[u][i][x].data.comment.body;
+						message += "\n" + queue[u][i][x].data.comment.body;
 					}
 				}
 
