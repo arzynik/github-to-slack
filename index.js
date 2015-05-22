@@ -159,6 +159,8 @@ var processQueue = function() {
 				if (username) {
 					data.username = username;
 				}
+				
+				console.log(data);
 
 				request.post(webhook).form(data);
 			}	
