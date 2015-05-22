@@ -142,9 +142,6 @@ var processQueue = function() {
 				}
 
 				var data = {
-					message_format: 'html',
-					format: 'json',
-					auth_token: token,
 					room_id: room,
 					text: getDisplayUser(queue[u][i][x].data.sender) + message
 				};
