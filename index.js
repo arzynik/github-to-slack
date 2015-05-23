@@ -139,7 +139,7 @@ var processQueue = function() {
             			author_link: closeAction.data.sender.html_url,
             			author_icon: closeAction.data.sender.avatar_url,
 						pretext: 'Issue <' + closeAction.data.issue.html_url + '|#' + closeAction.data.issue.number + '>:<' + closeAction.data.issue.html_url + '|' + closeAction.data.issue.title + '> was closed',
-						test: comments || 'Closed without comment.'
+						text: comments || 'Closed without comment.'
 					}]
 				};
 
