@@ -133,7 +133,7 @@ var processQueue = function() {
 				}
 
 				var data = {
-					attachments: {
+					attachments: [{
 						fallback: message,
             			author_name: closeAction.data.sender.login,
             			author_link: closeAction.data.sender.url,
@@ -142,7 +142,7 @@ var processQueue = function() {
 						title: closeAction.data.issue.title,
 						title_link: closeAction.data.issue.html_url
 					}
-				};
+				}];
 
 				if (room) {
 					data.channel = room;
