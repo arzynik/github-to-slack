@@ -141,8 +141,8 @@ var processQueue = function() {
 						pretext: 'Issue <' + closeAction.data.issue.html_url + '|#' + closeAction.data.issue.number + '> was closed',
 						title: closeAction.data.issue.title,
 						title_link: closeAction.data.issue.html_url
-					}
-				}];
+					}]
+				};
 
 				if (room) {
 					data.channel = room;
