@@ -2,6 +2,10 @@
 	"name": "github-to-slack",
 	"description": "forward ticket closures and their closing messages only to slack",
 	"version": "0.0.1",
+	"keywords": [
+		"github",
+		"slack"
+	],
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/arzynik/github-to-slack"
