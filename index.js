@@ -74,9 +74,7 @@ var checkUser = function(u) {
 	}
 
 	request.get({url: u.url, headers: {'User-Agent': 'github-to-slack'}, json: true}, function(error, response, user) {
-		console.log(arguments);
 		if (!error && response.statusCode == 200 && user) {
-			console.log('NOERROR');
 			switch (nametype) {
 				case 'first':
 				default:
@@ -93,8 +91,6 @@ var checkUser = function(u) {
 					break;
 			}
 		}
-		console.log('NAME');
-		console.log(users[u.id]);
 	});
 };
 
@@ -140,7 +136,7 @@ var processQueue = function() {
 			}
 
 			if (closeAction) {
-				var message = '<' + closeAction.data.sender.url + '|' + getDisplayUser(closeAction.data.sender) + '>' 
+				var message = '<' + closeAction.data.sender.html_url + '|' + getDisplayUser(closeAction.data.sender) + '>' 
 					+ ' closed issue <' + closeAction.data.issue.html_url + '|#' + closeAction.data.issue.number + '>: <' + closeAction.data.issue.html_url + '|' + closeAction.data.issue.title + '>';
 
 				var comments = '';
@@ -157,7 +153,7 @@ var processQueue = function() {
             			author_name: getDisplayUser(closeAction.data.sender),
             			author_link: closeAction.data.sender.html_url,
             			author_icon: closeAction.data.sender.avatar_url,
-						pretext: 'Issue <' + closeAction.data.issue.html_url + '|#' + closeAction.data.issue.number + '>:<' + closeAction.data.issue.html_url + '|' + closeAction.data.issue.title + '> was closed',
+						pretext: 'Issue <' + closeAction.data.issue.html_url + '|#' + closeAction.data.issue.number + '>: <' + closeAction.data.issue.html_url + '|' + closeAction.data.issue.title + '> was closed',
 						text: comments || 'Closed without comment.'
 					}]
 				};
@@ -181,7 +177,7 @@ var processQueue = function() {
 					body: data,
 					json: true
 				}, function(err,res,body) {
-					console.log(arguments);
+					console.error(arguments);
 				});
 			}	
 			queue[u][i] = null;	
