@@ -133,7 +133,6 @@ var processQueue = function() {
 				}
 
 				var data = {
-					text: 'test. u shouldnt see me.',
 					attachments: {
 						fallback: message,
             			author_name: closeAction.data.sender.login,
