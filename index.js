@@ -71,7 +71,7 @@ var checkUser = function(u) {
 		return;
 	}
 
-	request.get({url: u.url, json: true}, function(error, response, user) {
+	request.get({url: u.url, headers: {'User-Agent': 'github-to-slack'}, json: true}, function(error, response, user) {
 		console.log(arguments);
 		if (!error && response.statusCode == 200) {
 			users[u.id] = user.name;
