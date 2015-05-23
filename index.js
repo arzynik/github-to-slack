@@ -31,8 +31,6 @@ app.get('/', function(req, res) {
 // when we get a comment request
 app.post('/', function(req, res) {
 	var data = req.body;
-	
-	console.log(data);
 
 	if (data.action == 'created' && data.issue && data.comment) {
 		addToQueue({
@@ -69,10 +67,12 @@ var addToQueue = function(item) {
 // make sure we have the users data
 var checkUser = function(u) {
 	if (users[u.id]) {
+		console.log('no id');
 		return;
 	}
 
 	request.get({url: u.url, json: true}, function(error, response, user) {
+		console.log(arguments);
 		if (!error && response.statusCode == 200) {
 			users[u.id] = user.name;
 		}
