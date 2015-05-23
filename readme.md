@@ -3,6 +3,9 @@ GitHub to Slack event forwarding
 
 The purpose of this script is to group up issue closing, their comments, and forward it to slack as a notification. Slacks current integration sends too much data that I typicaly do not need.
 
+![image](https://cloud.githubusercontent.com/assets/27974/7781901/189e902a-00b1-11e5-83df-88bb5306b49a.png)
+
+
 ### Installation
 1. Add a custom webhook integration for [Slack](http://slack.com) at https://TEAMDOMAIN.slack.com/services/new/incoming-webhook replacing **TEAMDOMAIN** with your url.
 2. Add a new [GitHub](http://github.com) webhook by going to https://github.com/ORGANIZATION/REPOSITORY/settings/hooks/new, replacing **ORGANIZATION** and **REPOSITORY**.
