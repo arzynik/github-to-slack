@@ -20,6 +20,7 @@ var
 	icon_url = process.env.SLACK_ICON_URL || 'https://assets-cdn.github.com/images/modules/logos_page/GitHub-Mark.png',			// url of the icon for your user
 	icon_emoji = process.env.SLACK_ICON_EMOJI || null,		// url of the icon for your user
 	username = process.env.SLACK_USERNAME || 'GitHub',		// username of the bot
+	nametype = process.env.SLACK_AUTHOR_NAMETYPE || 'first',		// first, full, last, login
 	queue = [], running = false, users = [], queueTimer = null;
 
 app.use(bodyParser.json());
@@ -48,7 +49,9 @@ app.post('/', function(req, res) {
 // add item to que
 var addToQueue = function(item) {
 
-	checkUser(item.data.sender);
+	if (nametype != 'login') {
+		checkUser(item.data.sender);
+	}
 
 	var i = item.data.issue.id;
 	var u = item.data.sender.id;
@@ -67,15 +70,31 @@ var addToQueue = function(item) {
 // make sure we have the users data
 var checkUser = function(u) {
 	if (users[u.id]) {
-		console.log('no id');
 		return;
 	}
 
 	request.get({url: u.url, headers: {'User-Agent': 'github-to-slack'}, json: true}, function(error, response, user) {
 		console.log(arguments);
-		if (!error && response.statusCode == 200) {
-			users[u.id] = user.name;
+		if (!error && response.statusCode == 200 && user) {
+			console.log('NOERROR');
+			switch (nametype) {
+				case 'first':
+				default:
+					users[u.id] = user.name.split(' ').shift();
+					break;
+				case 'last':
+					users[u.id] = user.name.split(' ').pop();
+					break;
+				case 'full':
+					users[u.id] = user.name;
+					break;
+				case 'login':
+					users[u.id] = user.login;
+					break;
+			}
 		}
+		console.log('NAME');
+		console.log(users[u.id]);
 	});
 };
 
@@ -121,7 +140,7 @@ var processQueue = function() {
 			}
 
 			if (closeAction) {
-				var message = '<' + closeAction.data.sender.url + '|' + getDisplayUser(queue[u][i][x].data.sender) + '>' 
+				var message = '<' + closeAction.data.sender.url + '|' + getDisplayUser(closeAction.data.sender) + '>' 
 					+ ' closed issue <' + closeAction.data.issue.html_url + '|#' + closeAction.data.issue.number + '>: <' + closeAction.data.issue.html_url + '|' + closeAction.data.issue.title + '>';
 
 				var comments = '';
@@ -135,7 +154,7 @@ var processQueue = function() {
 				var data = {
 					attachments: [{
 						fallback: message + comments,
-            			author_name: closeAction.data.sender.login,
+            			author_name: getDisplayUser(closeAction.data.sender),
             			author_link: closeAction.data.sender.html_url,
             			author_icon: closeAction.data.sender.avatar_url,
 						pretext: 'Issue <' + closeAction.data.issue.html_url + '|#' + closeAction.data.issue.number + '>:<' + closeAction.data.issue.html_url + '|' + closeAction.data.issue.title + '> was closed',
