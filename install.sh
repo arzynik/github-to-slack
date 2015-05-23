@@ -1,11 +1,13 @@
-curl -u "USERNAME" -i \
-	https://api.github.com/hub \
-	-F "hub.mode=subscribe" \
-	-F "hub.topic=https://github.com/OWNER/REPOSITORY/events/issues" \
-	-F "hub.callback=http://SERVER/slack/issues"
+#!/bin/sh
 
-curl -u "USERNAME" -i \
-	https://api.github.com/hub \
-	-F "hub.mode=subscribe" \
-	-F "hub.topic=https://github.com/OWNER/REPOSITORY/events/issue_comment" \
-	-F "hub.callback=http://SERVER/slack/issue_comment"
+read -e -p "Enter your GitHub username: " USER
+read -e -p "Enter repository owner: " OWNER
+read -e -p "Enter repository name: " REPO
+read -e -p "Enter your github-to-slack url: " HOOK
+
+# -F "hub.callback=http://TESTcrunchbutton-github-to-slack.herokuapp.com/slack/issues"
+
+curl -H "Content-Type: application/json" \
+	-u "${USER}" \
+	-X POST -d '{"name":"web","active":true,"events":["issues","issue_comment"],"config":{"url":"${HOOK}","content_type":"json"}}' \
+	https://api.github.com/repos/${OWNER}/${REPO}/hooks

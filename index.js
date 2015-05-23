@@ -20,7 +20,6 @@ var
 	icon_url = process.env.SLACK_ICON_URL || 'https://assets-cdn.github.com/images/modules/logos_page/GitHub-Mark.png',			// url of the icon for your user
 	icon_emoji = process.env.SLACK_ICON_EMOJI || null,		// url of the icon for your user
 	username = process.env.SLACK_USERNAME || 'GitHub',		// username of the bot
-	use_github_users = process.env.SLACK_USE_GITHUB_USERS || null, // use the username and image of the github user performing the action
 	queue = [], running = false, users = [], queueTimer = null;
 
 app.use(bodyParser.json());
@@ -125,48 +124,38 @@ var processQueue = function() {
 				var message = '<' + closeAction.data.sender.url + '|' + getDisplayUser(queue[u][i][x].data.sender) + '>' 
 					+ ' closed issue <' + closeAction.data.issue.html_url + '|#' + closeAction.data.issue.number + '>: <' + closeAction.data.issue.html_url + '|' + closeAction.data.issue.title + '>';
 
+				var comments = '';
 				for (var x in queue[u][i]) {
 					// each comment
 					if (queue[u][i][x].type == 'comment') {
-						message += "\n" + queue[u][i][x].data.comment.body;
+						comments += "\n" + queue[u][i][x].data.comment.body;
 					}
 				}
 
 				var data = {
 					attachments: [{
-						fallback: message,
+						fallback: message + comments,
             			author_name: closeAction.data.sender.login,
-            			author_link: closeAction.data.sender.url,
+            			author_link: closeAction.data.sender.html_url,
             			author_icon: closeAction.data.sender.avatar_url,
-						pretext: 'Issue <' + closeAction.data.issue.html_url + '|#' + closeAction.data.issue.number + '> was closed',
-						title: closeAction.data.issue.title,
-						title_link: closeAction.data.issue.html_url
+						pretext: 'Issue <' + closeAction.data.issue.html_url + '|#' + closeAction.data.issue.number + '>:<' + closeAction.data.issue.html_url + '|' + closeAction.data.issue.title + '> was closed',
+						test: comments || 'Closed without comment.'
 					}]
 				};
 
 				if (room) {
 					data.channel = room;
 				}
-				
-				if (1==2 && use_github_users) {
-					data.icon_url = closeAction.data.sender.avatar_url;
-					data.username = closeAction.data.sender.login + ' via GitHub';
 
-				} else {
-
-					if (icon_emoji) {
-						data.icon_emoji = icon_emoji;
-					} else if (icon_url) {
-						data.icon_url = icon_url;
-					}
-
-					if (username) {
-						data.username = username;
-					}
+				if (icon_emoji) {
+					data.icon_emoji = icon_emoji;
+				} else if (icon_url) {
+					data.icon_url = icon_url;
 				}
 
-				
-				console.log(data);
+				if (username) {
+					data.username = username;
+				}
 
 				request.post({
 					url: webhook,
