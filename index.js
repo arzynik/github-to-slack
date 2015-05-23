@@ -23,10 +23,12 @@ var
 	nametype = process.env.SLACK_AUTHOR_NAMETYPE || 'first',		// first, full, last, login
 	queue = [], running = false, users = [], queueTimer = null;
 
+nametype = nametype.toLowerCase();
+
 app.use(bodyParser.json());
 
 app.get('/', function(req, res) {
-	res.send('Bad kitty. Bad kitty. Bad kitty. Bad kitty. Bad kitty. Bad kitty. Bad kitty. Bad kitty.');
+	res.send('Bad kitty.');
 });
 
 // when we get a comment request

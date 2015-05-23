@@ -9,27 +9,33 @@
 	"env": {
 		"SLACK_WEBHOOK_URL": {
 			"description": "Webhook url generated at https://TEAMDOMAIN.slack.com/services/new/incoming-webhook",
-			"value": ""
+			"value": "",
+			"required": true
 		},
 		"SLACK_CHANEL": {
 			"description": "Channel overwrite with hash prefix.",
-			"value": ""
+			"value": "",
+			"required": false
 		},
 		"SLACK_USERNAME": {
 			"description": "Username of the bot.",
-			"value": "GitHub"
+			"value": "GitHub",
+			"required": false
 		},
 		"SLACK_ICON_URL": {
 			"description": "Icon url of the bot. ",
-			"value": "https://assets-cdn.github.com/images/modules/logos_page/GitHub-Mark.png"
+			"value": "https://assets-cdn.github.com/images/modules/logos_page/GitHub-Mark.png",
+			"required": false
 		},
 		"SLACK_ICON_EMOJI": {
 			"description": "Emoji iconcon of the bot.",
-			"value": ""
+			"value": "",
+			"required": false
 		},
 		"SLACK_AUTHOR_NAMETYPE": {
 			"description": "First, last, full, or login. Sends an additional request to github to get users names.",
-			"value": "first"
+			"value": "first",
+			"required": true
 		}
 	}
 }

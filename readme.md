@@ -20,3 +20,6 @@ The purpose of this script is to group up issue closing, their comments, and for
 - **SLACK_ICON_URL** (optional) - Icon url of the bot. 
 - **SLACK_ICON_EMOJI** (optional) - Emoji iconcon of the bot.
 - **SLACK_AUTHOR_NAMETYPE** (optional) - First (default), last, full, or login. Sends an additional request to github to get users names.
+
+
+[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
