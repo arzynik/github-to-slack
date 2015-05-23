@@ -30,7 +30,7 @@ app.get('/', function(req, res) {
 });
 
 // when we get a comment request
-app.post('/slack/issue_comment', function(req, res) {
+app.post('/', function(req, res) {
 	var data = req.body;
 	
 	console.log(data);
@@ -40,23 +40,12 @@ app.post('/slack/issue_comment', function(req, res) {
 			type: 'comment',
 			data: data
 		});
-	}
-});
-
-// when we get an issue request
-app.post('/slack/issues', function(req, res) {
-	var data = req.body;
-	
-	console.log(data);
-
-	if (data.action == 'closed' && data.issue) {
+	} else if (data.action == 'closed' && data.issue) {
 		addToQueue({
 			type: 'issue',
 			data: data
 		});
 	}
-
-	res.end();
 });
 
 // add item to que
@@ -133,7 +122,8 @@ var processQueue = function() {
 			}
 
 			if (closeAction) {
-				var message = ' closed issue <' + closeAction.data.issue.html_url + '|#' + closeAction.data.issue.number + '>: <' + closeAction.data.issue.html_url + '|' + closeAction.data.issue.title + '>';
+				var message = '<' + closeAction.data.sender.url + '|' + getDisplayUser(queue[u][i][x].data.sender) + '>' 
+					+ ' closed issue <' + closeAction.data.issue.html_url + '|#' + closeAction.data.issue.number + '>: <' + closeAction.data.issue.html_url + '|' + closeAction.data.issue.title + '>';
 
 				for (var x in queue[u][i]) {
 					// each comment
@@ -143,14 +133,23 @@ var processQueue = function() {
 				}
 
 				var data = {
-					text: getDisplayUser(queue[u][i][x].data.sender) + message
+					text: 'test. u shouldnt see me.',
+					attachments: {
+						fallback: message,
+            			author_name: closeAction.data.sender.login,
+            			author_link: closeAction.data.sender.url,
+            			author_icon: closeAction.data.sender.avatar_url,
+						pretext: 'Issue <' + closeAction.data.issue.html_url + '|#' + closeAction.data.issue.number + '> was closed',
+						title: closeAction.data.issue.title,
+						title_link: closeAction.data.issue.html_url
+					}
 				};
 
 				if (room) {
 					data.channel = room;
 				}
 				
-				if (use_github_users) {
+				if (1==2 && use_github_users) {
 					data.icon_url = closeAction.data.sender.avatar_url;
 					data.username = closeAction.data.sender.login + ' via GitHub';
 
@@ -166,6 +165,7 @@ var processQueue = function() {
 						data.username = username;
 					}
 				}
+
 				
 				console.log(data);
 
