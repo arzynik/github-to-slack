@@ -55,7 +55,7 @@ app.post('/', function(req, res) {
 		}
 
 		var id = null;
-		var issue = new RegExp('(#([0-9]+))|(https://github.com/' + data.repository.full_name + '/issues/([0-9]+))',"g");
+		var issue = new RegExp('^.*?(#([0-9]+))|(https://github.com/' + data.repository.full_name + '/issues/([0-9]+)).*?$',"g");
 
 		if (data.head_commit.message.match(issue)) {
 			id = data.head_commit.message.replace(issue, '$2$4');
