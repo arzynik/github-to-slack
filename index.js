@@ -42,7 +42,7 @@ app.post('/', function(req, res) {
 			type: 'comment',
 			data: data
 		});
-	} else if (req.headers['X-GitHub-Event'] == 'push') {
+	} else if (req.headers['x-gitHub-event'] == 'push') {
 		console.error('Push action');
 		if (!data.head_commit.message || data.refs != 'refs/head/' + data.repository.master_branch) {
 			console.error('bad message: ' + data.head_commit.message);
@@ -73,7 +73,7 @@ app.post('/', function(req, res) {
 			data: data
 		});
 
-	} else if (req.headers['X-GitHub-Event'] == 'issues' && data.action == 'closed' && data.issue) {
+	} else if (req.headers['x-gitHub-event'] == 'issues' && data.action == 'closed' && data.issue) {
 		addToQueue({
 			type: 'issue',
 			data: data
