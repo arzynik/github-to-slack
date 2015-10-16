@@ -44,6 +44,8 @@ app.post('/', function(req, res) {
 		});
 	} else if (event == 'push') {
 		console.error('Push action');
+		console.error('message: ' + data.head_commit.message);
+
 		if (!data.head_commit.message || data.ref != 'refs/heads/' + data.repository.master_branch) {
 			console.error('bad message: ' + data.head_commit.message);
 			console.error('bad ref: ' + 'refs/heads/' + data.repository.master_branch);
