@@ -44,10 +44,10 @@ app.post('/', function(req, res) {
 		});
 	} else if (event == 'push') {
 		console.error('Push action');
-		console.error('message: ' + data.head_commit.message);
+		console.error('message: ' + data.commits[0].message);
 
-		if (!data.head_commit.message || data.ref != 'refs/heads/' + data.repository.master_branch) {
-			console.error('bad message: ' + data.head_commit.message);
+		if (!data.commits[0].message || data.ref != 'refs/heads/' + data.repository.master_branch) {
+			console.error('bad message: ' + data.commits[0].message);
 			console.error('bad ref: ' + 'refs/heads/' + data.repository.master_branch);
 			console.error('bad ref: ' + data.ref);
 			res.status(501).send('invalid commit or ref');
@@ -57,12 +57,12 @@ app.post('/', function(req, res) {
 		var number = null;
 		var issue = new RegExp('^.*?(close|closes|closed|fix|fixes|fixed|resolve|resolves|resolved) ((#([0-9]+))|(https://github.com/' + data.repository.full_name + '/issues/([0-9]+))).*?$',"g");
 
-		if (data.head_commit.message.match(issue)) {
-			number = data.head_commit.message.replace(issue, '$4$6');
+		if (data.commits[0].message.match(issue)) {
+			number = data.commits[0].message.replace(issue, '$4$6');
 		}
 
 		if (!number) {
-			console.error('could not find issue id from commit: ' + data.head_commit.message);
+			console.error('could not find issue id from commit: ' + data.commits[0].message);
 			res.status(501).send('invalid issue id');
 			return;
 		}
@@ -192,7 +192,7 @@ var processQueue = function() {
 					if (queue[u][i][x].type == 'comment') {
 						comments += "\n" + queue[u][i][x].data.comment.body;
 					} else if (queue[u][i][x].type == 'push') {
-						comments += "\n" + queue[u][i][x].data.head_commit.message;
+						comments += "\n" + queue[u][i][x].data.commits[0].message;
 					}
 				}
 
