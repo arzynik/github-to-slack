@@ -40,8 +40,15 @@ app.post('/', function(req, res) {
 			type: 'comment',
 			data: data
 		});
-	} else if (data.action == 'push' && data.head_commit.message && data.refs == 'refs/head/' + data.repository.master_branch) {
-
+	} else if (data.action == 'push') {
+		console.log('Push action');
+		if (!data.head_commit.message || data.refs != 'refs/head/' + data.repository.master_branch) {
+			console.log('bad message: ' + data.head_commit.message);
+			console.log('bad refs: ' + data.refs != 'refs/head/' + data.repository.master_branch);
+			res.status(501).send('invalid request type');
+			return;
+		}
+		console.log(data);
 		var id = null;
 		var issue = new RegExp('(#([0-9]+))|(https://github.com/' + data.repository.full_name + '/issues/([0-9]+))',"g");
 
@@ -50,6 +57,7 @@ app.post('/', function(req, res) {
 		}
 
 		if (!id) {
+			console.log('could not find issue id from commit: ' + data.head_commit.message);
 			res.status(501).send('invalid request type');
 			return;
 		}
