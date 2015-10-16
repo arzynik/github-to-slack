@@ -48,7 +48,7 @@ app.post('/', function(req, res) {
 			res.status(501).send('invalid request type');
 			return;
 		}
-		console.log(data);
+
 		var id = null;
 		var issue = new RegExp('(#([0-9]+))|(https://github.com/' + data.repository.full_name + '/issues/([0-9]+))',"g");
 
@@ -92,6 +92,8 @@ var addToQueue = function(item) {
 
 	var i = item.data.issue.id;
 	var u = item.data.sender.id;
+
+	console.log('queuing: ' + item.type + ' | ' + i + ' | ' + u);
 
 	if (!queue[u]) {
 		queue[u] = [];
