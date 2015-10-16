@@ -37,7 +37,7 @@ app.post('/', function(req, res) {
 	var event = req.get('X-GitHub-Event');
 	console.error(event);
 
-	if (event == 'issues' && data.action == 'created' && data.issue && data.comment) {
+	if (event == 'issue_comment' && data.action == 'created' && data.issue && data.comment) {
 		addToQueue({
 			type: 'comment',
 			data: data
@@ -221,7 +221,7 @@ var processQueue = function() {
 					body: data,
 					json: true
 				}, function(err,res,body) {
-					console.error(res);
+					console.error(err);
 				});
 			}
 			queue[u][i] = null;
