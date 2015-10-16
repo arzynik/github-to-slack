@@ -34,7 +34,6 @@ app.get('/', function(req, res) {
 // when we get a comment request
 app.post('/', function(req, res) {
 	var data = req.body;
-	var message =
 
 	if (data.action == 'created' && data.issue && data.comment) {
 		addToQueue({
