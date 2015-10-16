@@ -7,7 +7,7 @@
  *
  */
 
-console.log('Starting github-to-slack...');
+console.error('Starting github-to-slack...');
 
 var
 	express = require('express'),
@@ -35,16 +35,18 @@ app.get('/', function(req, res) {
 app.post('/', function(req, res) {
 	var data = req.body;
 
-	if (data.action == 'created' && data.issue && data.comment) {
+	console.error('event: ' + req.headers['X-GitHub-Event']);
+
+	if (req.headers['X-GitHub-Event'] == 'issues' && data.action == 'created' && data.issue && data.comment) {
 		addToQueue({
 			type: 'comment',
 			data: data
 		});
-	} else if (data.action == 'push') {
-		console.log('Push action');
+	} else if (req.headers['X-GitHub-Event'] == 'push') {
+		console.error('Push action');
 		if (!data.head_commit.message || data.refs != 'refs/head/' + data.repository.master_branch) {
-			console.log('bad message: ' + data.head_commit.message);
-			console.log('bad refs: ' + data.refs != 'refs/head/' + data.repository.master_branch);
+			console.error('bad message: ' + data.head_commit.message);
+			console.error('bad refs: ' + data.refs != 'refs/head/' + data.repository.master_branch);
 			res.status(501).send('invalid commit or refs');
 			return;
 		}
@@ -57,7 +59,7 @@ app.post('/', function(req, res) {
 		}
 
 		if (!id) {
-			console.log('could not find issue id from commit: ' + data.head_commit.message);
+			console.error('could not find issue id from commit: ' + data.head_commit.message);
 			res.status(501).send('invalid issue id');
 			return;
 		}
@@ -71,7 +73,7 @@ app.post('/', function(req, res) {
 			data: data
 		});
 
-	} else if (data.action == 'closed' && data.issue) {
+	} else if (req.headers['X-GitHub-Event'] == 'issues' && data.action == 'closed' && data.issue) {
 		addToQueue({
 			type: 'issue',
 			data: data
@@ -93,7 +95,7 @@ var addToQueue = function(item) {
 	var i = item.data.issue.id;
 	var u = item.data.sender.id;
 
-	console.log('queuing: ' + item.type + ' | ' + i + ' | ' + u);
+	console.error('queuing: ' + item.type + ' | ' + i + ' | ' + u);
 
 	if (!queue[u]) {
 		queue[u] = [];
@@ -219,7 +221,7 @@ var processQueue = function() {
 					body: data,
 					json: true
 				}, function(err,res,body) {
-					console.error(arguments);
+					console.error(res);
 				});
 			}
 			queue[u][i] = null;
@@ -231,5 +233,5 @@ var processQueue = function() {
 };
 
 app.listen(port, function() {
-	console.log('github-to-slack is running on port ' + port);
+	console.error('github-to-slack is running on port ' + port);
 });
