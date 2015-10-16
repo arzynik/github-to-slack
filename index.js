@@ -40,11 +40,35 @@ app.post('/', function(req, res) {
 			type: 'comment',
 			data: data
 		});
+	} else if (data.action == 'push' && data.head_commit.message && data.refs == 'refs/head/' + data.repository.master_branch) {
+
+		var id = null;
+		var issue = new RegExp('(#([0-9]+))|(https://github.com/' + data.repository.full_name + '/issues/([0-9]+))',"g");
+
+		if (data.head_commit.message.match(issue)) {
+			id = data.head_commit.message.replace(issue, '$2$4');
+		}
+
+		if (!id) {
+			res.status(501).send('invalid request type');
+			return;
+		}
+
+		data.issue = {
+			id: id
+		};
+
+		addToQueue({
+			type: 'push',
+			data: data
+		});
+
 	} else if (data.action == 'closed' && data.issue) {
 		addToQueue({
 			type: 'issue',
 			data: data
 		});
+
 	} else {
 		res.status(501).send('invalid request type');
 	}
@@ -149,6 +173,8 @@ var processQueue = function() {
 					// each comment
 					if (queue[u][i][x].type == 'comment') {
 						comments += "\n" + queue[u][i][x].data.comment.body;
+					} else if (queue[u][i][x].type == 'push') {
+						comments += "\n" + queue[u][i][x].data.head_commit.message;
 					}
 				}
 
