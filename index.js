@@ -54,21 +54,21 @@ app.post('/', function(req, res) {
 			return;
 		}
 
-		var id = null;
+		var number = null;
 		var issue = new RegExp('^.*?(#([0-9]+))|(https://github.com/' + data.repository.full_name + '/issues/([0-9]+)).*?$',"g");
 
 		if (data.head_commit.message.match(issue)) {
-			id = data.head_commit.message.replace(issue, '$2$4');
+			number = data.head_commit.message.replace(issue, '$2$4');
 		}
 
-		if (!id) {
+		if (!number) {
 			console.error('could not find issue id from commit: ' + data.head_commit.message);
 			res.status(501).send('invalid issue id');
 			return;
 		}
 
 		data.issue = {
-			id: id
+			number: number
 		};
 
 		addToQueue({
@@ -95,7 +95,7 @@ var addToQueue = function(item) {
 		checkUser(item.data.sender);
 	}
 
-	var i = item.data.issue.id;
+	var i = item.data.issue.number;
 	var u = item.data.sender.id;
 
 	console.error('queuing: ' + item.type + ' | ' + i + ' | ' + u);
