@@ -15,7 +15,7 @@ var
 	request = require('request'),
 	bodyParser = require('body-parser')
 	port = process.env.PORT || process.env.VCAP_APP_PORT || 5000,
-	webhook = process.env.SLACK_WEBHOOK_URL || 'YOUR_URL',	// your webhok url 
+	webhook = process.env.SLACK_WEBHOOK_URL || 'YOUR_URL',	// your webhok url
 	room = process.env.SLACK_CHANEL || null,				// default to webhook chanel
 	icon_url = process.env.SLACK_ICON_URL || 'https://assets-cdn.github.com/images/modules/logos_page/GitHub-Mark.png',			// url of the icon for your user
 	icon_emoji = process.env.SLACK_ICON_EMOJI || null,		// url of the icon for your user
@@ -34,6 +34,7 @@ app.get('/', function(req, res) {
 // when we get a comment request
 app.post('/', function(req, res) {
 	var data = req.body;
+	var message =
 
 	if (data.action == 'created' && data.issue && data.comment) {
 		addToQueue({
@@ -45,7 +46,10 @@ app.post('/', function(req, res) {
 			type: 'issue',
 			data: data
 		});
+	} else {
+		res.status(501).send('invalid request type');
 	}
+	res.end();
 });
 
 // add item to que
@@ -138,7 +142,7 @@ var processQueue = function() {
 			}
 
 			if (closeAction) {
-				var message = '<' + closeAction.data.sender.html_url + '|' + getDisplayUser(closeAction.data.sender) + '>' 
+				var message = '<' + closeAction.data.sender.html_url + '|' + getDisplayUser(closeAction.data.sender) + '>'
 					+ ' closed issue <' + closeAction.data.issue.html_url + '|#' + closeAction.data.issue.number + '>: <' + closeAction.data.issue.html_url + '|' + closeAction.data.issue.title + '>';
 
 				var comments = '';
@@ -182,8 +186,8 @@ var processQueue = function() {
 				}, function(err,res,body) {
 					console.error(arguments);
 				});
-			}	
-			queue[u][i] = null;	
+			}
+			queue[u][i] = null;
 		}
 	}
 
