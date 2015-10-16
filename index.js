@@ -34,18 +34,15 @@ app.get('/', function(req, res) {
 // when we get a comment request
 app.post('/', function(req, res) {
 	var data = req.body;
+	var event = req.get('X-GitHub-Event');
+	console.error(event);
 
-	for (var x = 0; x < req.headers.length; x++) {
-		console.error(x + ': ' + req.headers[x]);
-	}
-	console.error('event: ' + req.headers['x-gitHub-event']);
-
-	if (req.headers['x-gitHub-event'] == 'issues' && data.action == 'created' && data.issue && data.comment) {
+	if (event == 'issues' && data.action == 'created' && data.issue && data.comment) {
 		addToQueue({
 			type: 'comment',
 			data: data
 		});
-	} else if (req.headers['x-gitHub-event'] == 'push') {
+	} else if (event == 'push') {
 		console.error('Push action');
 		if (!data.head_commit.message || data.refs != 'refs/head/' + data.repository.master_branch) {
 			console.error('bad message: ' + data.head_commit.message);
@@ -76,7 +73,7 @@ app.post('/', function(req, res) {
 			data: data
 		});
 
-	} else if (req.headers['x-gitHub-event'] == 'issues' && data.action == 'closed' && data.issue) {
+	} else if (event == 'issues' && data.action == 'closed' && data.issue) {
 		addToQueue({
 			type: 'issue',
 			data: data
