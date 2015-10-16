@@ -46,7 +46,8 @@ app.post('/', function(req, res) {
 		console.error('Push action');
 		if (!data.head_commit.message || data.refs != 'refs/head/' + data.repository.master_branch) {
 			console.error('bad message: ' + data.head_commit.message);
-			console.error('bad refs: ' + data.refs != 'refs/head/' + data.repository.master_branch);
+			console.error('bad refs: ' + 'refs/head/' + data.repository.master_branch);
+			console.error('bad refs: ' + data.refs);
 			res.status(501).send('invalid commit or refs');
 			return;
 		}
