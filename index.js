@@ -45,7 +45,7 @@ app.post('/', function(req, res) {
 		if (!data.head_commit.message || data.refs != 'refs/head/' + data.repository.master_branch) {
 			console.log('bad message: ' + data.head_commit.message);
 			console.log('bad refs: ' + data.refs != 'refs/head/' + data.repository.master_branch);
-			res.status(501).send('invalid request type');
+			res.status(501).send('invalid commit or refs');
 			return;
 		}
 
@@ -58,7 +58,7 @@ app.post('/', function(req, res) {
 
 		if (!id) {
 			console.log('could not find issue id from commit: ' + data.head_commit.message);
-			res.status(501).send('invalid request type');
+			res.status(501).send('invalid issue id');
 			return;
 		}
 
