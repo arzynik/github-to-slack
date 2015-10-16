@@ -37,7 +37,7 @@ app.post('/', function(req, res) {
 
 	console.error('event: ' + req.headers);
 
-	if (req.headers['X-GitHub-Event'] == 'issues' && data.action == 'created' && data.issue && data.comment) {
+	if (req.headers['x-gitHub-event'] == 'issues' && data.action == 'created' && data.issue && data.comment) {
 		addToQueue({
 			type: 'comment',
 			data: data
