@@ -44,11 +44,11 @@ app.post('/', function(req, res) {
 		});
 	} else if (event == 'push') {
 		console.error('Push action');
-		if (!data.head_commit.message || data.refs != 'refs/head/' + data.repository.master_branch) {
+		if (!data.head_commit.message || data.ref != 'refs/head/' + data.repository.master_branch) {
 			console.error('bad message: ' + data.head_commit.message);
-			console.error('bad refs: ' + 'refs/head/' + data.repository.master_branch);
-			console.error('bad refs: ' + data.refs);
-			res.status(501).send('invalid commit or refs');
+			console.error('bad ref: ' + 'refs/head/' + data.repository.master_branch);
+			console.error('bad ref: ' + data.ref);
+			res.status(501).send('invalid commit or ref');
 			return;
 		}
 
