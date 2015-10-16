@@ -55,10 +55,10 @@ app.post('/', function(req, res) {
 		}
 
 		var number = null;
-		var issue = new RegExp('^.*?(#([0-9]+))|(https://github.com/' + data.repository.full_name + '/issues/([0-9]+)).*?$',"g");
+		var issue = new RegExp('^.*?(close|closes|closed|fix|fixes|fixed|resolve|resolves|resolved) ((#([0-9]+))|(https://github.com/' + data.repository.full_name + '/issues/([0-9]+))).*?$',"g");
 
 		if (data.head_commit.message.match(issue)) {
-			number = data.head_commit.message.replace(issue, '$2$4');
+			number = data.head_commit.message.replace(issue, '$4$6');
 		}
 
 		if (!number) {
@@ -166,12 +166,15 @@ var processQueue = function() {
 	for (var u in queue) {
 		// each issue
 		for (var i in queue[u]) {
-			// first make sure we have a close action. if its just a comment we dont care.
 
 			if (!queue[u][i]) {
 				continue;
 			}
 
+			// check the time. remove any items that are older than a minute
+
+
+			// first make sure we have a close action. if its just a comment we dont care.
 			var closeAction = false;
 			for (var x in queue[u][i]) {
 				if (queue[u][i][x].type == 'issue' && queue[u][i][x].data.action == 'closed') {
