@@ -11,7 +11,7 @@ The purpose of this script is to group up issue closing, their comments, and for
 2. Add a new [GitHub](http://github.com) webhook by going to https://github.com/ORGANIZATION/REPOSITORY/settings/hooks/new, replacing **ORGANIZATION** and **REPOSITORY**.
 3. Enter the **Payload URL** as whereever you have your github-to-slack integration hosted.
 4. Set **Content-Type** to **application/json**.
-6. Select **Let me select individual events**, and choose **Issues** and **Issue comment**.
+6. Select **Let me select individual events**, and choose **Issues**, **Issue comment**, and **Push**.
 7. Leave **Active** checked.
 8. Press **Add Webhook**.
 9. If you are on [Heroku](http://heroku.com), [AppFog](http://appfog.com) or some other host where you can define your environment variables, define them as described below. Otherwise you can edit your **index.js** file.
